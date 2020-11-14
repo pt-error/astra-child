@@ -1,2 +1,3 @@
 # MikeCodesAstraChild
-My Childtheme for Astra
+
+Astra Version: 2.6.0
