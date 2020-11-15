@@ -50,3 +50,15 @@ add_action( 'wp_enqueue_scripts', 'pte_enqueue_scripts' );
 function pte_enqueue_scripts() {
     wp_enqueue_script( 'pte-scripts', get_stylesheet_directory_uri() . '/js/main.js', array(), filemtime(get_stylesheet_directory() . '/js/main.js'));
 }
+
+
+//AUTHOR-API-EXPOSING deaktivieren
+add_filter( 'rest_endpoints', function( $endpoints ){
+    if ( isset( $endpoints['/wp/v2/users'] ) ) {
+        unset( $endpoints['/wp/v2/users'] );
+    }
+    if ( isset( $endpoints['/wp/v2/users/(?P<id>[\d]+)'] ) ) {
+        unset( $endpoints['/wp/v2/users/(?P<id>[\d]+)'] );
+    }
+    return $endpoints;
+});
