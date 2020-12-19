@@ -62,3 +62,9 @@ add_filter( 'rest_endpoints', function( $endpoints ){
     }
     return $endpoints;
 });
+
+add_filter('upload_mimes', 'pte_mime_types');
+function pte_mime_types($mimes) {
+    $mimes['svg'] = 'image/svg+xml';
+    return $mimes;
+}
