@@ -1,7 +1,6 @@
 <?php
 
-use Leafo\ScssPhp\Server;
-use Leafo\ScssPhp\Compiler;
+use ScssPhp\ScssPhp\Compiler;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -21,21 +20,29 @@ function check_for_recompile($filename_scss,$import = false){
     if( filemtime($fullPath.'/'.$filename_scss) >  filemtime($fullPath.'/../'.$filename_css) || filesize($fullPath.'/../'.$filename_css) == 0) {
         $directoryMain = $fullPath;
 
-        $scss = new Compiler();
-        $scss->setFormatter('Leafo\ScssPhp\Formatter\Compressed');
-        $serverMain = new Server($directoryMain,null,$scss);
-
-        // Wenn es ein Importiertes File ist soll das Main File aktualisiert werden, ansonsten das angegebene File
         if($import === true){
-            $serverMain->compileFile($fullPath.'/'.'main.scss', $fullPath.'/../'.$filename_css);
+            compileCss($fullPath.'/'.'main.scss', $fullPath.'/../'.$filename_css);
         }else{
-            $serverMain->compileFile($fullPath.'/'.$filename_scss, $fullPath.'/../'.$filename_css);
+            compileCss($fullPath.'/'.$filename_scss, $fullPath.'/../'.$filename_css);
         }
 
         return true;
     }
     return false;
 }
+
+
+function compileCss($in, $out) {
+    $compiler = new Compiler();
+
+    $inContent = file_get_contents($in);
+
+    $compiler->setImportPaths(__DIR__ . '/scss');
+
+    $css = $compiler->compileString($inContent)->getCss();
+
+    file_put_contents($out, $css);
+} 
 
 // Generiertes Stylesheet einfügen und veränderungen überwachen
 add_action( 'wp_enqueue_scripts', 'pte_enqueue_styles' );

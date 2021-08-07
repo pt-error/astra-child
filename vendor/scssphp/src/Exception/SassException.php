@@ -12,13 +12,6 @@
 
 namespace ScssPhp\ScssPhp\Exception;
 
-/**
- * Range exception
- *
- * @author Anthon Pang <anthon.pang@gmail.com>
- *
- * @internal
- */
-final class RangeException extends \Exception implements SassException
+interface SassException extends \Throwable
 {
 }
