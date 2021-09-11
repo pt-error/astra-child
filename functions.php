@@ -14,20 +14,23 @@ function check_for_recompile($filename_scss,$import = false){
     $fullPath = __DIR__ . '/scss';
     $cachePath = $fullPath.'/scss_cache';
     $filename_css = 'theme-style.min.css';
+
     if (!file_exists($cachePath)) {
         mkdir($cachePath, 0644, true);
     }
+
     if( filemtime($fullPath.'/'.$filename_scss) >  filemtime($fullPath.'/../'.$filename_css) || filesize($fullPath.'/../'.$filename_css) == 0) {
         $directoryMain = $fullPath;
 
         if($import === true){
             compileCss($fullPath.'/'.'main.scss', $fullPath.'/../'.$filename_css);
-        }else{
+        } else {
             compileCss($fullPath.'/'.$filename_scss, $fullPath.'/../'.$filename_css);
         }
 
         return true;
     }
+
     return false;
 }
 
@@ -36,11 +39,8 @@ function compileCss($in, $out) {
     $compiler = new Compiler();
 
     $inContent = file_get_contents($in);
-
     $compiler->setImportPaths(__DIR__ . '/scss');
-
     $css = $compiler->compileString($inContent)->getCss();
-
     file_put_contents($out, $css);
 } 
 
